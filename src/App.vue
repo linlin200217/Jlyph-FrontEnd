@@ -1,15 +1,15 @@
 <template>
-  <div class="h-full w-full">
-      <TheNavBar />
-      <LeftFilter />
-      <MiddleResults />
-      <RightFilter />
+  <div class="h-screen w-screen">
+    <div class="flex flex-row justify-between">
+      <Left />
+      <Middle />
+      <Right />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TheNavBar from "./components/TheNavBar.vue";
-import LeftFilter from "./components/LeftFilter.vue";
-import MiddleResults from "./components/MiddleResults.vue";
-import RightFilter from "./components/RightFilter.vue";
+import Left from "./components/Left.vue";
+import Middle from "./components/Middle.vue";
+import Right from "./components/Right.vue";
 </script>

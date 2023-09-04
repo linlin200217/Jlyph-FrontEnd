@@ -1,11 +1,9 @@
 <template>
-    <div class="inline-block w-1/4 h-screen max-h-screen p-2">
-
-    </div>
+    <Panel panel_text="B"></Panel>
 </template>
   
 <script setup lang="ts">
-
+import Panel from "./Panel.vue"
 </script>
 
 <style scoped></style>
