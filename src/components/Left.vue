@@ -4,17 +4,17 @@
         <Divider></Divider>
         <RawData></RawData>
         <Divider></Divider>
-        <TopicRecomm></TopicRecomm>
+        <Recommendation></Recommendation>
         <Divider></Divider>
-        <PromptGuide></PromptGuide>
+        <Generation></Generation>
     </div>
 </template>
   
 <script setup lang="ts">
 import GlyphType from "./composables/GlyphType.vue";
 import RawData from "./composables/RawData.vue";
-import TopicRecomm from "./composables/TopicRecomm.vue";
-import PromptGuide from "./composables/PromptGuide.vue"
+import Recommendation from "./composables/Recommendation.vue";
+import Generation from "./composables/Generation.vue"
 import Divider from "./composables/Divider.vue";
 </script>
 

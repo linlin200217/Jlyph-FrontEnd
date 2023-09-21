@@ -1,9 +1,11 @@
 <template>
-    <Panel panel_text="B"></Panel>
+    <div>
+        <el-icon><Delete /></el-icon>
+    </div>
 </template>
   
 <script setup lang="ts">
-import Panel from "./Panel.vue"
+
 </script>
 
 <style scoped></style>
