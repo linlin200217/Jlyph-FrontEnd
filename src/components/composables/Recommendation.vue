@@ -1,27 +1,35 @@
 <template>
   <Panel main_panel_enabled="false" sub_panel_enabled="true" sub_panel_text="A3"></Panel>
-  <div class="flex justify-center m-2 mb-6 ">
-    <h3 class="font-semibold text-base tracking-wide text-center">Recommendation Word Cloud</h3>
-  </div>
-  <div ref="wordcloudRef" class="flex justify-center m-2 w-full h-56"></div>
+  <Header text="Recommendation Word Cloud"></Header>
+  <div id="word_cloud" class="flex justify-center m-2 w-full h-48"></div>
+  <div><el-button size="small" :icon="Refresh" @click="refresh" circle /></div>
 </template>
-  
+
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { watch } from 'vue'
 import * as echarts from "echarts"
 import 'echarts-wordcloud'
 
 import Panel from "./Panel.vue"
+import Header from './Header.vue'
+import { storeToRefs } from 'pinia'
+import { dataProcess } from '@/store/modules/dataProcess.ts'
+import { Refresh } from '@element-plus/icons-vue'
 
-const wordcloudRef = ref()
+const useDataProcess = dataProcess();
+const { dataTitle, word_data } = storeToRefs(useDataProcess);
 
-const initWordCloud = (data: any) => {
-  let myChart = echarts.init(wordcloudRef.value);
+const refresh = () => {
+  initWordCloud()
+}
+
+const initWordCloud = () => {
+  let myChart = echarts.init(document.getElementById('word_cloud'));
 
   const option = {
     title: {
-      text: 'keyword',
-      show: false
+      text: dataTitle.value,
+      show: true
     },
     tooltip: {},
     series: [{
@@ -62,7 +70,7 @@ const initWordCloud = (data: any) => {
           }
         }
       },
-      data: data
+      data: word_data.value
     }]
   }
   option && myChart.setOption(option);
@@ -73,38 +81,11 @@ const initWordCloud = (data: any) => {
   });
 }
 
-const data = [
-  {
-    name: '前端工程师',
-    value: 100
-  },
-  {
-    name: '数据可视化',
-    value: 50
-  },
-  {
-    name: '大耳朵图图',
-    value: 20
-  },
-  {
-    name: '前端工程师',
-    value: 150
-  },
-  {
-    name: '数据可视化',
-    value: 75
-  },
-  {
-    name: '大耳朵图图',
-    value: 55
-  }
-]
-
-onMounted(() => {
-  initWordCloud(data)
+watch(() => [...word_data.value], () => {
+  initWordCloud()
+  console.log(typeof(word_data.value));
 })
 
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

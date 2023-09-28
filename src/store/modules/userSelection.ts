@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const userSelection = defineStore('userSelection', () => {
-  const point = ref(1)
+  const glyphType = ref('')
+  const styleType = ref('')
 
-  return { point }
+  return { glyphType, styleType }
 })

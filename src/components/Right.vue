@@ -5,6 +5,7 @@
         <Placement></Placement>
         <Divider></Divider>
         <Modification></Modification>
+        <Divider></Divider>
         <Legend></Legend>
     </div>
 </template>
