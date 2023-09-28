@@ -7,7 +7,7 @@
                 <p class="text-left text-sm">Prompt input</p>
             </div>
             <div class="w-3/5 ml-4">
-                <el-input v-model="promptInput" placeholder="Prompt input" clearable />
+                <el-input v-model="generationPromptInput1" placeholder="Prompt input" clearable />
             </div>
             <div class="m-0 p-2">
                 <p class="text-left text-sm">Primary Guide</p>
@@ -24,7 +24,7 @@
                 <p class="text-left text-sm">Secondary prompt input</p>
             </div>
             <div class="w-3/5 ml-4">
-                <el-input v-model="promptInputSec" placeholder="Secondary prompt input" clearable />
+                <el-input v-model="generationPromptInput2" placeholder="Secondary prompt input" clearable />
             </div>
             <div class="m-0 p-2">
                 <p class="text-left text-sm">Secondary Guide</p>
@@ -44,11 +44,12 @@ import { ref } from 'vue'
 import Panel from "./Panel.vue"
 import Header from './Header.vue';
 import { userSelection } from '@/store/modules/userSelection.ts'
+import { storeToRefs } from 'pinia'
 
 
-let genSelec = ref('')
-let promptInput = ref('')
-let promptInputSec = ref('')
+// let genSelec = ref('')
+// let promptInput = ref('')
+// let promptInputSec = ref('')
 let genePrimary = ref([
     { id: 0, type: 'generation', url: 'src/assets/figures/gen-circle.png', alt: 'circle', selected: false },
     { id: 1, type: 'generation', url: 'src/assets/figures/gen-rectangle.png', alt: 'rectangle', selected: false },
@@ -60,9 +61,14 @@ let geneSecondary = ref([
     { id: 2, type: 'generation', url: 'src/assets/figures/gen-square.png', alt: 'square', selected: false },
 ])
 let userSelec = userSelection();
+const generationPromptInput1 = storeToRefs(userSelection()).generationPromptInput1;
+const generationPromptInput2 = storeToRefs(userSelection()).generationPromptInput2;
+const generationPrimaryGuide1 = storeToRefs(userSelection()).generationPrimaryGuide1;
+const generationPrimaryGuide2 = storeToRefs(userSelection()).generationPrimaryGuide2;
+
 
 function selectGene(image, index) {
-    genSelec.value = index;
+    userSelec.generationPrimaryGuide1 = index;
     image.selected = true;
 
     genePrimary.value.forEach((item) => {
@@ -70,10 +76,11 @@ function selectGene(image, index) {
             item.selected = false;
         }
     })
+    console.log(userSelec.generationPrimaryGuide1);
 }
 
 function selectGeneSec(image, index) {
-    genSelec.value = index;
+    userSelec.generationPromptInput2 = index;
     image.selected = true;
 
     geneSecondary.value.forEach((item) => {

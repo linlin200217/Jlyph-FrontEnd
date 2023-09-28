@@ -69,13 +69,22 @@
 import { ref } from 'vue'
 import Panel from "./Panel.vue"
 import Header from './Header.vue';
+import { storeToRefs } from 'pinia';
+import { userSelection } from '@/store/modules/userSelection.ts'
 
-let background_mode = ref('')
-let background_color = ref('')
-let draw_lines = ref('')
-let stroke_color = ref('')
-let dashed = ref('')
-let thickness = ref('')
+// let background_mode = ref('')
+// let background_color = ref('')
+// let draw_lines = ref('')
+// let stroke_color = ref('')
+// let dashed = ref('')
+// let thickness = ref('')
+
+let background_mode = storeToRefs(userSelection()).modificationBackgroundMode;
+let background_color = storeToRefs(userSelection()).modificationBackgroundColor;
+let draw_lines = storeToRefs(userSelection()).modificationDrawLines;
+let stroke_color = storeToRefs(userSelection()).modificationStrokeColor;
+let dashed = storeToRefs(userSelection()).modificationDashed;
+let thickness = storeToRefs(userSelection()).modificationThickness;
 
 const predefineColors = ref([
     '#ff4500',
