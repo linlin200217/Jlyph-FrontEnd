@@ -2,7 +2,7 @@
     <Panel main_panel_enabled="false" sub_panel_enabled="true" sub_panel_text="D2"></Panel>
     <Header text="Placement"></Header>
     <div class="flex justify-between mb-2 flex-wrap">
-        <el-radio-group v-model="style_type" class="m-auto items-center">
+        <el-radio-group v-model="placementType" class="m-auto items-center">
             <el-radio class="text-xl" v-for="item in buttons" :label="item.text" size="large" border>{{ item.text
             }}</el-radio>
         </el-radio-group>
@@ -50,9 +50,12 @@ import { ref, watch } from 'vue'
 import Panel from "./Panel.vue"
 import Header from './Header.vue';
 import { userSelection } from '@/store/modules/userSelection.ts'
+import store from 'src/store';
+import { storeToRefs } from 'pinia';
 
 let userSelec = userSelection();
-let style_type = ref('')
+// let style_type = ref('')
+let placementType = storeToRefs(userSelec).placementType;
 let selectionEnable = ref(false)
 const buttons = [
     { text: 'grid' },
@@ -60,14 +63,15 @@ const buttons = [
     { text: 'geo' },
 ]
 
-watch(style_type, (newValue, _) => {
-    userSelec.styleType = newValue;
+watch(placementType, (newValue, _) => {
+    // userSelec.styleType = newValue;
     if (newValue === 'grid') {
         selectionEnable.value = false
     }
     if (newValue === 'data' || newValue === 'geo') {
         selectionEnable.value = true
     }
+    console.log(userSelec.placementType);
 })
 
 let categorical_result = ref([])
