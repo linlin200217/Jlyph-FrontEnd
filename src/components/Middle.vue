@@ -1,5 +1,5 @@
 <template>
-    <div class="inline-block flex flex-col w-1/2 h-screen max-h-full p-2">
+    <div class="inline-block flex flex-col w-1/2 h-screen max-h-screen p-2">
         <Results></Results>
         <Preview></Preview>
     </div>

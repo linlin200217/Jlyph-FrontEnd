@@ -24,7 +24,6 @@ interface upload_response_form {
   wordcloud: any
 }
 
-// export const upload_post = (data: upload_request_form) => request.post<any, upload_response_form>(API.UPLOAD_POST, data)
 export const upload_post = (data: upload_request_form) =>
   request.post<any, upload_response_form>(API.UPLOAD_POST, data, {
     headers: {
@@ -71,11 +70,11 @@ interface generate_request_form {
   design: string
   Categorical1: Array<categorical>
   Categorical2: Array<categorical> | null
-  prompt1: string | Array<string>
+  prompt1: string | Array<string> // whole -> Array
   prompt2: string | null
   guide1: number
   guide2: number | null
-  image_id: Array<gen_image_id> | string
+  image_id: Array<gen_image_id> | string // partial -> string
   data_title: string
 }
 
@@ -92,7 +91,11 @@ interface generate_response_form {
 }
 
 export const generate_post = (data: generate_request_form) =>
-  request.post<any, generate_response_form>(API.GENERATE_POST, data)
+  request.post<any, generate_response_form>(API.GENERATE_POST, data, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  })
 
 // --------- regenerate ---------
 interface regenerate_request_form {
@@ -168,7 +171,11 @@ interface process_response_form {
 }
 
 export const process_post = (data: process_request_form) =>
-  request.post<any, process_response_form>(API.PROCESS_POST, data)
+  request.post<any, process_response_form>(API.PROCESS_POST, data, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  })
 
 // --------- placement ---------
 interface placement_image {
@@ -178,7 +185,7 @@ interface placement_image {
 
 interface placement_request_form {
   design: string
-  drawer_by: string
+  drawer_by?: string // for whole & grid
   images: Array<placement_image>
   method: string
   data_title: string
@@ -209,7 +216,11 @@ interface placement_response_form {
 }
 
 export const placement_post = (data: placement_request_form) =>
-  request.post<any, placement_response_form>(API.PLACEMENT_POST, data)
+  request.post<any, placement_response_form>(API.PLACEMENT_POST, data, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  })
 
 // --------- image ---------
 interface image_response_form {
@@ -217,4 +228,6 @@ interface image_response_form {
 }
 
 export const image_get = (image_id: string) =>
-  request.post<any, image_response_form>(API.IMAGE_GET + image_id)
+  request.get<any, image_response_form>(API.IMAGE_GET + image_id, {
+    responseType: 'blob',
+  })

@@ -83,7 +83,6 @@ const initWordCloud = () => {
 
 watch(() => [...word_data.value], () => {
   initWordCloud()
-  console.log(typeof(word_data.value));
 })
 
 </script>

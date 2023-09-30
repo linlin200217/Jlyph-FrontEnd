@@ -3,20 +3,26 @@
     <Header text="Style Customization"></Header>
     <div class="flex flex-row flex-nowrap justify-start h-14">
         <div v-for="(image, index) in imageFilter(images, userSelec.glyphType)" :key="index" :label="index"
-            class="h-14 w-14 mx-3 hover:bg-sky-200" :class="{ selected: image.selected }" @click="selectCust(image, index)">
+            class="h-14 w-14 mx-3 hover:bg-sky-200" :class="{ selected: image.selected }" @click="selectCust(image.id, index)">
             <img :src="image.url" :alt="image.alt" />
+        </div>
+        <div class="justify-end">
+            <el-input-number v-model="spaceSize" :min="20" :max="500" size="small" />
+            <p class="el-upload__tip text-red">Space Size</p>
         </div>
     </div>
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+
 import Panel from "./Panel.vue"
 import Header from "./Header.vue"
 import { userSelection } from '@/store/modules/userSelection.ts'
 
 let userSelec = userSelection();
-let styleCust = ref('')
+const { styleType, styleID, spaceSize } = storeToRefs(userSelec);
 
 const images = ref([
     { id: 0, type: 'combination', url: 'src/assets/figures/sty-com-0.png', alt: 'Combination-0', selected: false },
@@ -32,16 +38,24 @@ function imageFilter(images: any, target: string) {
     return images.filter((item: any) => item.type === target)
 }
 
-function selectCust(image, index) {
-    styleCust.value = index;
-    image.selected = true;
-
-    images.value.forEach((item) => {
-        if (item.id != image.id) {
-            item.selected = false;
-        }
-    })
+function selectCust(id, index) {
+    styleType.value = index;
+    styleID.value = id;
 }
+
+watch(styleID, (newValue, preValue) => {
+    if (newValue != null) {
+        images.value[newValue].selected = true;
+    }
+    if (preValue != null) {
+        images.value[preValue].selected = false;
+    }
+    if (newValue == null) {
+        images.value.forEach((element) => {
+            element.selected = false
+        })
+    }
+})
 </script>
 
 <style scoped>

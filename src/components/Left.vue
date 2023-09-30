@@ -1,5 +1,5 @@
 <template>
-    <div class="inline-block flex flex-col w-1/4 h-screen max-h-full p-2 bg-slate-200">
+    <div class="inline-block flex flex-col w-1/4 h-fit min-h-screen p-2 bg-slate-200">
         <GlyphType></GlyphType>
         <Divider></Divider>
         <RawData></RawData>

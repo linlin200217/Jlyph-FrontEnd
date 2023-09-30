@@ -13,8 +13,9 @@
                 <p class="text-left text-sm">Primary Guide</p>
             </div>
             <div class="flex flex-row flex-nowrap justify-start h-14">
-                <div v-for="(image, index) in genePrimary" :key="index" :label="index" class="h-14 w-14 mx-3 hover:bg-sky-200"
-                    :class="{ selected: image.selected }" @click="selectGene(image, index)">
+                <div v-for="(image, index) in genePrimary" :key="index" :label="index"
+                    class="h-14 w-14 mx-3 hover:bg-sky-200" :class="{ selected: image.selected }"
+                    @click="selectGene(index)">
                     <img :src="image.url" :alt="image.alt" />
                 </div>
             </div>
@@ -30,26 +31,30 @@
                 <p class="text-left text-sm">Secondary Guide</p>
             </div>
             <div class="flex flex-row flex-nowrap justify-start h-14">
-                <div v-for="(image, index) in geneSecondary" :key="index" :label="index" class="h-14 w-14 mx-3 hover:bg-sky-200"
-                    :class="{ selected: image.selected }" @click="selectGeneSec(image, index)">
+                <div v-for="(image, index) in geneSecondary" :key="index" :label="index"
+                    class="h-14 w-14 mx-3 hover:bg-sky-200" :class="{ selected: image.selected }"
+                    @click="selectGeneSec(index)">
                     <img :src="image.url" :alt="image.alt" />
                 </div>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute top-0 right-0 m-2">
+                <el-button type="primary" native-type="submit" @click="pregenerate" round>Pre-generate</el-button>
             </div>
         </div>
     </div>
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue'
-import Panel from "./Panel.vue"
-import Header from './Header.vue';
-import { userSelection } from '@/store/modules/userSelection.ts'
+import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 
+import Panel from "./Panel.vue"
+import Header from './Header.vue';
+import { pregenerate_post } from '@/api/index.ts'
+import { userSelection } from '@/store/modules/userSelection.ts'
 
-// let genSelec = ref('')
-// let promptInput = ref('')
-// let promptInputSec = ref('')
 let genePrimary = ref([
     { id: 0, type: 'generation', url: 'src/assets/figures/gen-circle.png', alt: 'circle', selected: false },
     { id: 1, type: 'generation', url: 'src/assets/figures/gen-rectangle.png', alt: 'rectangle', selected: false },
@@ -60,34 +65,16 @@ let geneSecondary = ref([
     { id: 1, type: 'generation', url: 'src/assets/figures/gen-rectangle.png', alt: 'rectangle', selected: false },
     { id: 2, type: 'generation', url: 'src/assets/figures/gen-square.png', alt: 'square', selected: false },
 ])
+
 let userSelec = userSelection();
-const generationPromptInput1 = storeToRefs(userSelection()).generationPromptInput1;
-const generationPromptInput2 = storeToRefs(userSelection()).generationPromptInput2;
-const generationPrimaryGuide1 = storeToRefs(userSelection()).generationPrimaryGuide1;
-const generationPrimaryGuide2 = storeToRefs(userSelection()).generationPrimaryGuide2;
+const { generationPromptInput1, generationPromptInput2, generationPrimaryGuide1, generationPrimaryGuide2 } = storeToRefs(userSelec);
 
-
-function selectGene(image, index) {
-    userSelec.generationPrimaryGuide1 = index;
-    image.selected = true;
-
-    genePrimary.value.forEach((item) => {
-        if (item.id != image.id) {
-            item.selected = false;
-        }
-    })
-    console.log(userSelec.generationPrimaryGuide1);
+function selectGene(index) {
+    generationPrimaryGuide1.value = index;
 }
 
-function selectGeneSec(image, index) {
-    userSelec.generationPromptInput2 = index;
-    image.selected = true;
-
-    geneSecondary.value.forEach((item) => {
-        if (item.id != image.id) {
-            item.selected = false;
-        }
-    })
+function selectGeneSec(index) {
+    generationPrimaryGuide2.value = index;
 }
 
 function componentShow(target: string) {
@@ -97,6 +84,50 @@ function componentShow(target: string) {
         return false;
     }
 }
+
+function pregenerate() {
+    let data = {
+        design: userSelec.glyphType,
+        prompt1: generationPromptInput1.value,
+        prompt2: generationPromptInput2.value,
+        guide1: generationPrimaryGuide1.value,
+        guide2: generationPrimaryGuide2.value,
+    }
+
+    pregenerate_post(data).then((response: any) => {
+        userSelec.pre_generated_image_id = response.image_id;
+    }).catch((error: any) => {
+        console.log(error)
+    })
+}
+
+watch(generationPrimaryGuide1, (newValue, preValue) => {
+    if (newValue != null) {
+        genePrimary.value[newValue].selected = true;
+    }
+    if (preValue != null) {
+        genePrimary.value[preValue].selected = false;
+    }
+    if (newValue == null) {
+        genePrimary.value.forEach((element) => {
+            element.selected = false
+        })
+    }
+})
+
+watch(generationPrimaryGuide2, (newValue, preValue) => {
+    if (newValue != null) {
+        geneSecondary.value[newValue].selected = true;
+    }
+    if (preValue != null) {
+        geneSecondary.value[preValue].selected = false;
+    }
+    if (newValue == null) {
+        geneSecondary.value.forEach((element) => {
+            element.selected = false
+        })
+    }
+})
 </script>
 
 <style scoped>

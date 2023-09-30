@@ -43,12 +43,10 @@ import { storeToRefs } from 'pinia'
 import { userSelection } from '@/store/modules/userSelection.ts'
 import { dataProcess } from '@/store/modules/dataProcess.ts'
 
-const glyph_type = storeToRefs(userSelection()).glyphType
+const useSelection = userSelection();
+const { glyphType } = storeToRefs(useSelection);
 const useDataProcess = dataProcess();
-const { cat_key, num_key } = storeToRefs(useDataProcess);
-
-let categorical_result = ref([])
-let numerical_result = ref([])
+const { cat_key, num_key, categorical_result, numerical_result } = storeToRefs(useDataProcess);
 
 let catDropdown = ref<any>([])
 let numDropdown = ref<any>([])
@@ -139,15 +137,15 @@ function isNotEmpty(value) {
   return (value != null && value.length != 0);
 }
 
-watch(glyph_type, (newType) => {
+watch(glyphType, (newType) => {
   catSelector(newType)
   numSelector(newType)
 })
 
 watch(() => [...categorical_result.value], (newArray, preArray) => {
-  newArray.forEach((element) => {
-    let newIndex = newArray.indexOf(element);
-    let preElement = preArray[newIndex];
+  for (let i = 0; i < newArray.length; i++) {
+    let element = newArray[i];
+    let preElement = preArray[i];
     if (isNotEmpty(element) && isEmpty(preElement)) {
       catDropdown.value.forEach((item) => {
         if (item.value === element) {
@@ -172,13 +170,13 @@ watch(() => [...categorical_result.value], (newArray, preArray) => {
         }
       })
     }
-  })
+  }
 })
 
 watch(() => [...numerical_result.value], (newArray, preArray) => {
-  newArray.forEach((element) => {
-    let newIndex = newArray.indexOf(element);
-    let preElement = preArray[newIndex];
+  for (let i = 0; i < newArray.length; i++) {
+    let element = newArray[i];
+    let preElement = preArray[i];
     if (isNotEmpty(element) && isEmpty(preElement)) {
       numDropdown.value.forEach((item) => {
         if (item.value === element) {
@@ -203,7 +201,7 @@ watch(() => [...numerical_result.value], (newArray, preArray) => {
         }
       })
     }
-  })
+  }
 })
 
 </script>
